@@ -12,8 +12,12 @@ export const connectDB = async () => {
     }
 
     // 새로운 연결 생성
-    console.log("URL", process.env.MONGODB_URI);
-    const client = new MongoClient(process.env.MONGODB_URI);
+    const MONGODB_URI =
+      process.env.NODE_ENV === "production"
+        ? process.env.MONGODB_URI_ATLAS
+        : process.env.MONGODB_URI_LOCAL;
+    console.log("URL", MONGODB_URI);
+    const client = new MongoClient(MONGODB_URI);
     await client.connect();
 
     db = client.db(process.env.DB_NAME);
@@ -26,6 +30,7 @@ export const connectDB = async () => {
   }
 };
 
+// 사용안함
 // DB 인스턴스만 반환하는 함수
 export const getDB = () => {
   if (!db) {
